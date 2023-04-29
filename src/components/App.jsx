@@ -2,36 +2,72 @@ import React, { Component } from 'react';
 import SearchBar from './SearchBar';
 import ImageGallery from './ImageGallery';
 import Button from './Button';
+import Modal from './Modal';
+import Loader from './Loader';
 import fetchImagesWithQuery from '../services/fetchAPI';
 
 class App extends Component {
   state = {
-    data: [],
+    images: [],
+    searchQuery: '',
+    page: 1,
+    loading: false,
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const prevQuery = prevState.searchQuery;
+    const nextQuery = this.state.searchQuery;
+    if (prevQuery !== nextQuery) {
+      this.fetchImages();
+    }
+  }
+
+  fetchImages = () => {
+    const { searchQuery, page } = this.state;
+    this.setState({ loading: true });
+    fetchImagesWithQuery(searchQuery, page)
+      .then((images) =>
+        this.setState((prevState) => ({
+          images: [...prevState.images, ...images],
+          page: prevState.page + 1,
+        }))
+      )
+      .then(this.scroll)
+      .catch((error) => this.setState({ error }))
+      .finally(() => this.setState({ loading: false }));
+  };
+  
+  handleClick = () => {
+    this.fetchImages();
   };
 
   onSearchSubmit = (searchQuery) => {
-    fetchImagesWithQuery(searchQuery)
-      .then(data => {
-        this.setState({ data });
-        console.log(data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    this.setState({
+      searchQuery: searchQuery,
+      page: 1,
+      images: [],
+    })
   };
 
-  handleClick = () => {
-    console.log('sss');
-  };
+  
+  scroll = () => {
+    return window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  }
+
+   
 
   render() {
-    const { data } = this.state;
-
+    const {images, loading, showModal} = this.state;
+    // console.log(this.state);
     return (
       <div>
         <SearchBar onSubmit={this.onSearchSubmit} />
-        <ImageGallery images={data} />
-        {data.length > 0 && <Button onClick={this.handleClick} />}
+        <ImageGallery images={images} />
+        {loading && <Loader />}
+        {images.length > 0 && !loading && <Button onClick={this.handleClick} />}
       </div>
     );
   }

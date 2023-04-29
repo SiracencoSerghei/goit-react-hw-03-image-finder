@@ -14,8 +14,7 @@ export default class SearchBar extends Component {
   handleInputChange = (event) => {
     const inputValue = event.target.value.trim();
     this.setState({ input: inputValue });
-    this.props.onSubmit(inputValue);
-    console.log(this.state.input);
+    // console.log(this.state.input);
   };
 
   onHandleSubmit = (event) => {
@@ -33,7 +32,7 @@ export default class SearchBar extends Component {
   render() {
     return (
       <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.onHandleSubmit}>
+        <form className="SearchForm" onSubmit={this.onHandleSubmit} onKeyDown={this.handleKeyPress}>
           <input
             className="SearchForm-input"
             type="text"
@@ -42,10 +41,9 @@ export default class SearchBar extends Component {
             placeholder="Search images and photos"
             value={this.state.input}
             onChange={this.handleInputChange}
-            onKeyDown={this.handleKeyPress}
           />
           <button type="submit" className="SearchForm-button">
-            <span className="button-label">Search</span>
+            <span className="SearchForm-button-label">Search</span>
           </button>
         </form>
       </header>
