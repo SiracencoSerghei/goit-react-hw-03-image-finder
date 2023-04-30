@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import { React, Component } from 'react';
 import SearchBar from './SearchBar';
 import ImageGallery from './ImageGallery';
 import Button from './Button';
 import Loader from './Loader';
+import Modal from './Modal';
 import fetchImagesWithQuery from '../services/fetchAPI';
 
 class App extends Component {
@@ -12,6 +13,8 @@ class App extends Component {
     page: 1,
     loading: false,
     endOfResults: false,
+    isModalOpen: false,
+    selectedImage: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -61,13 +64,22 @@ class App extends Component {
     });
   };
 
+  openModal = (selectedImage) => {
+    this.setState({ isModalOpen: true, selectedImage });
+  };
+
+  closeModal = () => {
+    this.setState({ isModalOpen: false });
+  };
+
   render() {
-    const { images, loading, endOfResults } = this.state;
+    const { images, loading, endOfResults, isModalOpen, selectedImage } = this.state;
     return (
       <div>
         <SearchBar onSubmit={this.onSearchSubmit} showErrorMessage={images.length === 0} />
-        <ImageGallery images={images} />
+        <ImageGallery images={images} openModal={this.openModal} />
         {loading && <Loader />}
+        {isModalOpen && <Modal selectedImage={selectedImage} closeModal={this.closeModal} />}
         {images.length > 0 && !endOfResults && <Button onClick={this.handleClick} />}
         {endOfResults && images.length > 0 && (
           <p className='Sorry'>We're sorry, <br/> but you've reached the end <br/> of search results.</p>

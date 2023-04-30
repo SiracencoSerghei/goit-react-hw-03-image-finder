@@ -164,9 +164,20 @@ img {
 }
 
 .Modal {
+  position: relative;
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 24px);
 }
+.Modal p {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 10px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 16px;
+}
+
 
 /*
 * Стили компонента Buton (Load more)

@@ -1,35 +1,33 @@
-import {Component} from 'react';
+
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'components/Modal';
-import Loader from 'components/Loader';
 
 export default class ImageGalleryItem extends Component {
   static propTypes = {
-    image: PropTypes.object.isRequired,
+    image: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    }).isRequired,
+    onImageClick: PropTypes.func.isRequired,
   };
 
-  state = {
-    isOpen: false,
-    loading: false,
+  handleClick = () => {
+    const { onImageClick, image } = this.props;
+    onImageClick(image);
   };
-
-  openModal = () => this.setState({ isOpen: true });
-  closeModal = () => this.setState({ isOpen: false });
 
   render() {
-    const { webformatURL, tags, largeImageURL } = this.props.image;
-    const { loading, isOpen } = this.state;
-  
+    const { webformatURL, tags } = this.props.image;
     return (
-      <li>
-        <img onClick={this.openModal} src={webformatURL} alt={tags} />
-        {loading && <Loader />}
-        {isOpen && (
-          <Modal
-            largeImageURL={largeImageURL}
-            close={this.closeModal}
-          />
-        )}
+      <li className="ImageGalleryItem">
+        <img
+          src={webformatURL}
+          alt={tags}
+          className="ImageGalleryItem-image"
+          onClick={this.handleClick}
+        />
       </li>
     );
   }
