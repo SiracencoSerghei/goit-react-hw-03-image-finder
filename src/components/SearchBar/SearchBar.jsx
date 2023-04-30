@@ -10,7 +10,6 @@ export default class SearchBar extends Component {
     input: '',
   };
 
-
   handleInputChange = (event) => {
     const inputValue = event.target.value.trim();
     this.setState({ input: inputValue });
@@ -18,38 +17,43 @@ export default class SearchBar extends Component {
 
   onHandleSubmit = (event) => {
     event.preventDefault();
-    this.props.onSubmit(this.state.input);
-    this.setState({ input: '' });
+    if (this.state.input) {
+      this.props.onSubmit(this.state.input);
+      this.setState({ input: '' });
+    }
   };
 
   handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && this.state.input) {
       event.preventDefault();
       this.props.onSubmit(this.state.input);
-
+      this.setState({ input: '' });
     }
   };
 
   render() {
+    const { input } = this.state;
+    const { showErrorMessage } = this.props;
+    const isDisabled = !input;
     return (
       <>
-      <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.onHandleSubmit} onKeyDown={this.handleKeyPress}>
-          <input
-            className="SearchForm-input"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            value={this.state.input}
-            onChange={this.handleInputChange}
-          />
-          <button type="submit" className="SearchForm-button">
-            <span className="SearchForm-button-label">Search</span>
-          </button>
-        </form>
-      </header>
-      {this.state.input === '' && <p className="Sorry" >Sorry, you need to write something.<br/> Please choose category of picter.</p>}
+        <header className="Searchbar">
+          <form className="SearchForm" onSubmit={this.onHandleSubmit} onKeyDown={this.handleKeyPress}>
+            <input
+              className="SearchForm-input"
+              type="text"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search images and photos"
+              value={input}
+              onChange={this.handleInputChange}
+            />
+            <button type="submit" className="SearchForm-button" disabled={isDisabled}>
+              <span className="SearchForm-button-label">Search</span>
+            </button>
+          </form>
+        </header>
+        {showErrorMessage && input === '' && <p className="Sorry">Sorry, you need to write something.<br /> Please choose category of picture.</p>}
       </>
     );
   }

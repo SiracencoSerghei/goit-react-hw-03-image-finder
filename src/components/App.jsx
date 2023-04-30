@@ -11,6 +11,7 @@ class App extends Component {
     searchQuery: '',
     page: 1,
     loading: false,
+    endOfResults: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -29,15 +30,19 @@ class App extends Component {
         this.setState((prevState) => ({
           images: [...prevState.images, ...images],
           page: prevState.page + 1,
+          endOfResults: images.length === 0,
         }))
       )
       .then(this.scroll)
       .catch((error) => this.setState({ error }))
       .finally(() => this.setState({ loading: false }));
   };
-  
+
   handleClick = () => {
-    this.fetchImages();
+    const { endOfResults } = this.state;
+    if (!endOfResults) {
+      this.fetchImages();
+    }
   };
 
   onSearchSubmit = (searchQuery) => {
@@ -45,28 +50,28 @@ class App extends Component {
       searchQuery: searchQuery,
       page: 1,
       images: [],
-    })
+      endOfResults: false,
+    });
   };
 
-  
   scroll = () => {
     return window.scrollTo({
       top: document.documentElement.scrollHeight,
       behavior: 'smooth',
     });
-  }
-
-   
+  };
 
   render() {
-    const {images, loading} = this.state;
-    // console.log(this.state);
+    const { images, loading, endOfResults } = this.state;
     return (
       <div>
-        <SearchBar onSubmit={this.onSearchSubmit} />
+        <SearchBar onSubmit={this.onSearchSubmit} showErrorMessage={images.length === 0} />
         <ImageGallery images={images} />
         {loading && <Loader />}
-        {images.length > 0 && !loading && <Button onClick={this.handleClick} />}
+        {images.length > 0 && !endOfResults && <Button onClick={this.handleClick} />}
+        {endOfResults && images.length > 0 && (
+          <p className='Sorry'>We're sorry, <br/> but you've reached the end <br/> of search results.</p>
+        )}
       </div>
     );
   }
