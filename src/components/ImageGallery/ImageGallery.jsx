@@ -6,15 +6,11 @@ import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 export default class ImageGallery extends Component {
 
     static propTypes = {
-        images: PropTypes.arrayOf(
-          PropTypes.shape({
-            id: PropTypes.number.isRequired,
-          })
-        ).isRequired,
+        images: PropTypes.array.isRequired,
       };
 
     render() {
-        const { images, onClick } = this.props;
+        const { images } = this.props;
         return (
             <ul className='ImageGallery'>
                 {images.map(image => (

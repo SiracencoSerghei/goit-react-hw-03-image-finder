@@ -207,3 +207,19 @@ img {
   width: 180px;
   z-index: 9999;
 }
+@keyframes wave {
+  0% {
+    transform: translateX(0) translateZ(0) scaleY(1);
+  }
+  50% {
+    transform: translateX(30%) translateZ(0) scaleY(0.5);
+  }
+  100% {
+    transform: translateX(200%) translateZ(0) scaleY(1);
+  }
+}
+.Sorry {
+  font-size: 40px;
+  color: red;
+  animation: wave 6.5s infinite;
+}

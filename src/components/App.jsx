@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import SearchBar from './SearchBar';
 import ImageGallery from './ImageGallery';
 import Button from './Button';
-import Modal from './Modal';
 import Loader from './Loader';
 import fetchImagesWithQuery from '../services/fetchAPI';
 
@@ -60,7 +59,7 @@ class App extends Component {
    
 
   render() {
-    const {images, loading, showModal} = this.state;
+    const {images, loading} = this.state;
     // console.log(this.state);
     return (
       <div>

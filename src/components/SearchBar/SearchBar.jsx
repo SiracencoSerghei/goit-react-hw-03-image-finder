@@ -14,23 +14,25 @@ export default class SearchBar extends Component {
   handleInputChange = (event) => {
     const inputValue = event.target.value.trim();
     this.setState({ input: inputValue });
-    // console.log(this.state.input);
   };
 
   onHandleSubmit = (event) => {
     event.preventDefault();
     this.props.onSubmit(this.state.input);
+    this.setState({ input: '' });
   };
 
   handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       this.props.onSubmit(this.state.input);
+
     }
   };
 
   render() {
     return (
+      <>
       <header className="Searchbar">
         <form className="SearchForm" onSubmit={this.onHandleSubmit} onKeyDown={this.handleKeyPress}>
           <input
@@ -47,6 +49,8 @@ export default class SearchBar extends Component {
           </button>
         </form>
       </header>
+      {this.state.input === '' && <p className="Sorry" >Sorry, you need to write something.<br/> Please choose category of picter.</p>}
+      </>
     );
   }
 }

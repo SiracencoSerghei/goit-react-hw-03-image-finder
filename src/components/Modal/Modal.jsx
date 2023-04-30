@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
-// import { PropTypes } from 'prop-types';
+import { PropTypes } from 'prop-types';
 
 export default class Modal extends Component {
+
+  static propTypes = {
+    close: PropTypes.func.isRequired,
+    image: PropTypes.shape({
+      largeImageURL: PropTypes.string.isRequired,
+        }),
+  };
+
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
   }
@@ -35,28 +43,4 @@ export default class Modal extends Component {
   }
 }
 
-// Modal.propTypes = {
-//   close: PropTypes.func.isRequired,
-//   data: PropTypes.shape({
-//     largeImageURL: PropTypes.string.isRequired,
-//     tags: PropTypes.string.isRequired,
-//   }),
-// };
 
-
-{/* <div className="Overlay" onClick={this.overlayClick}>
-        <div className="Modal">
-          <img src={largeImageURL} alt={tags} />
-        </div>
-      </div> */}
-
-
-      // <BackDrop className="overlay" onClick={this.handleBackdropclick}>
-      //   <ModalWindow className="modal">
-      //     <img
-      //       src={this.props.data.largeImageURL}
-      //       alt={this.props.data.tags}
-      //       width="1000"
-      //     />
-      //   </ModalWindow>
-      // </BackDrop>

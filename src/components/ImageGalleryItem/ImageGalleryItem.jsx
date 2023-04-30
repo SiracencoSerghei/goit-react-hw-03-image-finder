@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import Modal from 'components/Modal';
 
 export default class ImageGalleryItem extends Component {
+  static propTypes = {
+    image: PropTypes.object.isRequired,
+  };
+
   state = {
     isOpen: false,
   };
@@ -26,27 +30,3 @@ export default class ImageGalleryItem extends Component {
     );
   }
 }
-
-// ImageGalleryItem.propTypes = {
-//   webformatURL: PropTypes.string.isRequired,
-//   tags: PropTypes.string.isRequired,
-//   largeImageURL: PropTypes.string.isRequired,
-//   onClick: PropTypes.func.isRequired,
-// };
-
-
-
-// const ImageGalleryItem = ({ image: { id, webformatURL, tags, largeImageURL }, onClick }) => {
-//   // console.log(webformatURL, tags, largeImageURL);
-//   return (
-//     <li className="ImageGalleryItem">
-//       <img
-//         src={webformatURL}
-//         alt={tags}
-//         className="ImageGalleryItem-image"
-//         onClick={() => onClick(largeImageURL)}
-//         // onClick={() => onClick(console.log(largeImageURL))}
-//       />
-//     </li>
-//   );
-// };
