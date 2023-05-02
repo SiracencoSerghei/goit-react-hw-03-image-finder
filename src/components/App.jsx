@@ -4,7 +4,7 @@ import ImageGallery from './ImageGallery';
 import Button from './Button';
 import Loader from './Loader';
 import Modal from './Modal';
-import {fetchImagesWithQuery, param} from '../services/fetchAPI';
+import { fetchImagesWithQuery, param } from '../services/fetchAPI';
 
 class App extends Component {
   state = {
@@ -17,7 +17,8 @@ class App extends Component {
     selectedImage: '',
     totalPhoto: 0,
   };
-
+  
+  
   componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevState.searchQuery;
     const nextQuery = this.state.searchQuery;
@@ -30,19 +31,19 @@ class App extends Component {
     const { searchQuery, page } = this.state;
     this.setState({ loading: true });
     fetchImagesWithQuery(searchQuery, page)
-      .then((data) =>{
-        console.log(data.hits);
-        console.log(data.totalHits);
-        this.setState((prevState) => ({
-          images: [...prevState.images, ...data.hits],
-          page: prevState.page + 1,
-          endOfResults: data.hits.length === 0,
-          totalPhoto: data.totalHits,
-        }))}
-      )
+      .then(this.changeState)
       .then(this.scroll)
       .catch((error) => this.setState({ error }))
       .finally(() => this.setState({ loading: false }));
+  };
+
+  changeState = (data) => {
+    this.setState((prevState) => ({
+      images: [...prevState.images, ...data.hits],
+      page: prevState.page + 1,
+      endOfResults: data.hits.length === 0,
+      totalPhoto: data.totalHits,
+    }));
   };
 
   handleClick = () => {
@@ -60,7 +61,7 @@ class App extends Component {
       endOfResults: false,
     });
   };
-
+  
   scroll = () => {
     return window.scrollTo({
       top: document.documentElement.scrollHeight,
@@ -77,23 +78,23 @@ class App extends Component {
   };
 
   render() {
-    const { images, page, loading,isModalOpen, selectedImage, totalPhoto } = this.state;
-    console.log((totalPhoto - (page-1) * param.per_page));
-    const restPhoto = (totalPhoto - (page-1) * param.per_page);
-    console.log(restPhoto);
+    const { images, page, loading, isModalOpen, selectedImage, totalPhoto } = this.state;
+    const restPhoto = totalPhoto - (page - 1) * param.per_page;
+
     return (
       <div>
-        <SearchBar onSubmit={this.onSearchSubmit} showErrorMessage={images.length === 0} />
+        <SearchBar onSubmit={this.onSearchSubmit} />
         <ImageGallery images={images} openModal={this.openModal} />
         {loading && <Loader />}
         {isModalOpen && <Modal selectedImage={selectedImage} closeModal={this.closeModal} />}
-        {page > 1 && restPhoto > 0 && <Button onClick={this.handleClick} />}
-        {images.length < param.per_page && totalPhoto !==0 && (
-          <p className='Sorry'>We're sorry, <br/> but you've reached the end <br/> of search results.</p>
+        {page > 1 && restPhoto > 0 ? <Button onClick={this.handleClick} /> : null}
+        {totalPhoto !== 0 && restPhoto < 0 && (
+          <p className="Sorry">
+            We're sorry, <br /> but you've reached the end <br /> of search results.
+          </p>
         )}
       </div>
     );
   }
 }
-
 export default App;

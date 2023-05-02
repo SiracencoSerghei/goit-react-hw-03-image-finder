@@ -7,7 +7,6 @@ export default class Modal extends Component {
     closeModal: PropTypes.func.isRequired,
     selectedImage: PropTypes.object.isRequired,
   };
-
   state = {
     loading: true,
   };
@@ -18,7 +17,6 @@ export default class Modal extends Component {
     img.onload = () => this.setState({ loading: false });
     document.addEventListener('keydown', this.handleKeyDown);
   }
-
   componentWillUnmount() {
     const img = new Image();
     img.src = this.props.selectedImage.largeImageURL;

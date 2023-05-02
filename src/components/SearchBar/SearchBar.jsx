@@ -8,33 +8,33 @@ export default class SearchBar extends Component {
 
   state = {
     input: '',
+    searched: false,
   };
 
   handleInputChange = (event) => {
     const inputValue = event.target.value.trim();
-    this.setState({ input: inputValue });
+    this.setState({ input: inputValue, searched: false });
   };
-
+  
   onHandleSubmit = (event) => {
     event.preventDefault();
     if (this.state.input) {
       this.props.onSubmit(this.state.input);
-      this.setState({ input: '' });
+      this.setState({ searched: true });
     }
   };
-
+  
   handleKeyPress = (event) => {
-    if (event.key === 'Enter' && this.state.input) {
+    if (event.key === 'Enter' && !this.state.searched) {
       event.preventDefault();
       this.props.onSubmit(this.state.input);
-      this.setState({ input: '' });
+      this.setState({ searched: true });
     }
   };
 
   render() {
-    const { input } = this.state;
-    const { showErrorMessage } = this.props;
-    const isDisabled = !input;
+    const { input, searched } = this.state;
+    const isDisabled = !input || searched;
     return (
       <>
         <header className="Searchbar">
@@ -53,7 +53,7 @@ export default class SearchBar extends Component {
             </button>
           </form>
         </header>
-        {showErrorMessage && input === '' && <p className="Sorry">Sorry, you need to write something.<br /> Please choose category of picture.</p>}
+        {input === '' && <p className="Sorry">Sorry, you need to write something.<br /> Please choose category of picture.</p>}
       </>
     );
   }

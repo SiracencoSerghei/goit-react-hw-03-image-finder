@@ -4,7 +4,8 @@ import { RotatingLines } from "react-loader-spinner";
 export default class Loader extends Component {
   render() {
     return (
-      <RotatingLines
+      <div className="Overlay-loader">
+        <RotatingLines
         className="Loader"
         strokeColor="blue"
         strokeWidth="5"
@@ -12,6 +13,7 @@ export default class Loader extends Component {
         width="96"
         visible={true}
       />
+      </div>
     );
   }
 }
