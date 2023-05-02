@@ -31,8 +31,14 @@ class App extends Component {
     const { searchQuery, page } = this.state;
     this.setState({ loading: true });
     fetchImagesWithQuery(searchQuery, page)
-      .then(this.changeState)
-      .then(this.scroll)
+      .then((data) => {
+        if (data.hits.length === 0) {
+          this.setState({ endOfResults: true });
+        } else {
+          this.changeState(data);
+          this.scroll();
+        }
+      })
       .catch((error) => this.setState({ error }))
       .finally(() => this.setState({ loading: false }));
   };
@@ -78,7 +84,7 @@ class App extends Component {
   };
 
   render() {
-    const { images, page, loading, isModalOpen, selectedImage, totalPhoto } = this.state;
+    const { images, page, loading, isModalOpen, selectedImage, totalPhoto, endOfResults } = this.state;
     const restPhoto = totalPhoto - (page - 1) * param.per_page;
 
     return (
@@ -93,6 +99,11 @@ class App extends Component {
             We're sorry, <br /> but you've reached the end <br /> of search results.
           </p>
         )}
+        {endOfResults ? (
+          <p className="Sorry">
+            We're sorry, <br /> nothing was found for your search.
+          </p>
+        ) : null}
       </div>
     );
   }
