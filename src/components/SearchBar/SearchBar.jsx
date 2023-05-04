@@ -18,15 +18,12 @@ export default class SearchBar extends Component {
   
   onHandleSubmit = (event) => {
     event.preventDefault();
-    if (this.state.input) {
-      this.props.onSubmit(this.state.input);
-      this.setState({ searched: true });
+    console.log(this.props.searchQuery);
+    if (this.state.input === this.props.searchQuery){
+      alert(`You have already selected ${this.state.input}, you can change your search or continue browsing`);
+      return
     }
-  };
-  
-  handleKeyPress = (event) => {
-    if (event.key === 'Enter' && !this.state.searched) {
-      event.preventDefault();
+    if (this.state.input || (event.key === 'Enter' && !this.state.searched)) {
       this.props.onSubmit(this.state.input);
       this.setState({ searched: true });
     }

@@ -84,12 +84,12 @@ class App extends Component {
   };
 
   render() {
-    const { images, page, loading, isModalOpen, selectedImage, totalPhoto, endOfResults } = this.state;
+    const { images, page, loading, isModalOpen, selectedImage, totalPhoto, endOfResults, searchQuery } = this.state;
     const restPhoto = totalPhoto - (page - 1) * param.per_page;
 
     return (
       <div>
-        <SearchBar onSubmit={this.onSearchSubmit} />
+        <SearchBar onSubmit={this.onSearchSubmit} searchQuery={searchQuery} />
         <ImageGallery images={images} openModal={this.openModal} />
         {loading && <Loader />}
         {isModalOpen && <Modal selectedImage={selectedImage} closeModal={this.closeModal} />}
